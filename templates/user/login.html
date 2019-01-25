@@ -1,0 +1,19 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+    <script src="../../statics/jquery-3.3.1.min.js"></script>
+
+</head>
+<body>
+
+<form method="post" action="/user/login/">
+    {% csrf_token %}
+    <p>username:<input type="text" id="id_username" name="username"></p>
+    <p>password:<input type="text" id="id_password" name="password"></p>
+    <p><input type="submit" id="login_bt" value="点我登陆"></p>
+</form>
+
+</body>
+</html>
