@@ -2,10 +2,47 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <title>Title</title>
+    <title>hello</title>
+    <style>
+        body{
+            margin: 0;
+        }
+        .top_native{
+            font-family: "Courier New";
+            line-height: 48px;
+            height:48px;
+            background-color: cornflowerblue;
+        }
+        .top_native_content{
+            float: right;
+        }
+        .menu .item{
+            display: block;
+            padding: 15px 2px;
+            border-bottom: blueviolet solid 1px;
+        }
+        .menu .item:hover{
+            background-color: darkorange;
+            color: white;
+        }
+    </style>
     <script src="../../statics/jquery-3.3.1.min.js"></script>
+
 </head>
 <body>
-    <h2>welcome:{{ username }}</h2>
+
+    <div class="top_native">
+        <div style="float: left">欢迎进入用户管理系统</div>
+        <div class="top_native_content">用户名：{{ username }} | <a href="#">退出</a> </div>
+    </div>
+
+    <div>
+        <div class="menu" style="position: absolute;top: 48px;left: 0;bottom: 0;width: 200px;background-color: bisque">
+            <a class="item" href="#">班级管理</a>
+            <a class="item" href="#">学生管理</a>
+            <a class="item" href="#">老师管理</a>
+        </div>
+        <div class="content" style="position: absolute;top: 48px;left: 200px;bottom: 0;background-color: aquamarine;right: 0">1</div>
+    </div>
 </body>
 </html>
