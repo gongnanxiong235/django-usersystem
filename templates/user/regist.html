@@ -5,6 +5,12 @@
     <title>注册页面</title>
     <link rel="stylesheet" type="text/css" href="../../statics/css/regist.css">
     <script type="text/javascript" src='../../statics/jquery-3.3.1.min.js'></script>
+
+    <style>
+        .hello{
+            outline: red solid 1px;
+        }
+    </style>
 </head>
 <body>
     <div class="wrapper">
@@ -12,17 +18,19 @@
             <h1><span></span></h1>
             <div class="main">
                 <form>
-
+                    {% csrf_token %}
+                    <span style="float: left;line-height: 25px ;width: auto;background-color: gold ;font-family: 'Courier New'; color: red" id="tips"></span>
                     <div class="userName">
-                        <input type="text" name="username" placeholder="用户名">
+                        <input type="text" name="username" placeholder="用户名" id="in_username" onblur="checkusername(this)">
                     </div>
-                    <div class="password">
-                        <input type="password" name="pwd" placeholder="密码">
+                    <div class="password" >
+                        <input type="password"  name="pwd" placeholder="密码"  id="in_password" onblur="checkpassword(this)">
                     </div>
                     <div class="againpwd">
-                        <input type="password" name="pwd" placeholder="再次输入密码">
+                        <input type="password" name="pwd" placeholder="再次输入密码" id="in_re_password" onblur="checkrepassword(this)">
                     </div>
-                    <button>注册</button>
+
+                    <input type="button" id="bt" value="注册" onclick="regist(this)">
                 </form>
             </div>
         </article>
@@ -39,4 +47,127 @@
         </footer>
     </div>
 </body>
+    <script type="text/javascript">
+        var rep=/^[A-Za-z][A-Za-z0-9]*$/
+        function checkusername(self) {
+
+            if($(self).val()=="")
+            {
+                $("#tips").text("用户名不能为空")
+                $(self).addClass("hello")
+                return false
+            }
+            else if($("#in_username").val().length<6)
+            {
+
+
+                $("#tips").text("用户名长度最小为6位")
+                $(self).addClass("hello")
+                return false
+            }
+            else if($("#in_username").val().length>12)
+            {
+                $("#tips").text("用户名长度最长为12位")
+                $(self).addClass("hello")
+                return false
+            }
+            else if (!rep.test($("#in_username").val()))
+            {
+                $("#tips").text("用户名必须以字母开头")
+                $(self).addClass("hello")
+                return false
+            }
+            else
+            {
+                $("#tips").text("")
+                $(self).removeClass("hello")
+                return true
+            }
+        }
+        function  checkpassword(self) {
+            if ($(self).val()=="")
+            {
+                $("#tips").text("请输入密码")
+                $(self).addClass("hello")
+                return false
+            }
+            else if($(self).val().length<6)
+            {
+                $("#tips").text("密码长度必须大于6")
+                $(self).addClass("hello")
+                return false
+            }
+            else if($(self).val().length>12)
+            {
+                $("#tips").text("密码长度必须小于12")
+                $(self).addClass("hello")
+                return false
+            }
+            else
+            {
+                $("#tips").text("")
+                $(self).removeClass("hello")
+                return true
+            }
+        }
+        function checkrepassword(self) {
+            if($(self).val()!=$("#in_password").val())
+            {
+
+                $("#tips").text("两次密码不一致")
+                $(self).addClass("hello")
+                return false
+            }
+            else
+            {
+
+                $("#tips").text("")
+                $(self).removeClass("hello")
+                return true
+            }
+        }
+
+        function regist(self) {
+            if(checkusername($("#in_username")))
+            {
+                if(checkpassword($("#in_password")))
+                {
+                   if(checkrepassword($("#in_re_password")))
+                   {
+                       //提交注册信息
+                       username=$("#in_username").val()
+                       password=$("#in_password").val()
+                       $.ajax({
+                        url:"/user/regist/",
+                        type:"POST",
+                        dataType:"json",
+                        data:{
+                            "username":username,
+                            "password":password
+                        },
+                        success:function (response) {
+                            if(response.code==-1)
+                            {
+                                $("#tips").text(response.data.msg)
+                            }
+                            else
+                            {
+                                window.location.href = "/user/login/";
+                            }
+                        }
+                   })
+                   }
+                }
+                else
+                {
+                    return
+                }
+            }
+            else
+            {
+                return
+            }
+        }
+
+    </script>
 </html>

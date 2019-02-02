@@ -1,6 +1,7 @@
 from django.shortcuts import render,HttpResponse,redirect
 from user import models
 from django import views
+import json
 #在CBV中使用装饰器
 from django.utils.decorators import  method_decorator
 # Create your views here.
@@ -54,6 +55,17 @@ class Login(views.View):
 class Regist(views.View):
     def get(self,request,*args,**kwargs):
         return render(request, "user/regist.html")
+    def post(self,request,*args,**kwargs):
+        username=request.POST.get("username")
+        password=request.POST.get("password")
+        flag=models.User.objects.filter(username=username).exists()
+        if flag:
+            rep={"code":-1,"data":{"msg":"此用户已经存在"}}
+            return HttpResponse(json.dumps(rep),content_type='application/json')
+        else:
+            models.User.objects.create(username=username,password=password)
+            rep = {"code": 1, "data": {"msg": "ok"}}
+            return HttpResponse(json.dumps(rep), content_type='application/json')
 # def login(request):
 #     if request.method=='POST':
 #         username=request.POST.get('username')
